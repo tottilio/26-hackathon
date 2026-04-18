@@ -10,7 +10,7 @@ def extract_legal_data(text: str):
       etapa_procesal_siguiente, fecha_limite (DD/MM/YYYY).
     Si no encuentras un dato, usa "No especificado".
     
-    TEXTO: {text[:4000]}  # Limitamos caracteres para no saturar el modelo
+    TEXTO: {text[:24000]}  # Limitamos caracteres para no saturar el modelo
     """
     
     # Llamamos al modelo local (asegúrate de tenerlo descargado)
