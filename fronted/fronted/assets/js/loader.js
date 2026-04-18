@@ -330,56 +330,75 @@ window.renderArchivedCards = function () {
 /* ════════════════════════════════════════════════════════════
    LÓGICA DE NUEVO EXPEDIENTE
    ════════════════════════════════════════════════════════════ */
-
-window.handleFile = function (file) {
+async function handleAutoUpload(file) {
     if (!file) return;
-    // Simulamos detección de PDF
-    const banner = document.getElementById('ai-banner');
-    if (banner) banner.classList.remove('hidden');
-    console.log("Archivo cargado:", file.name);
-};
 
-window.runAI = function () {
-    const btn = document.getElementById('ai-big-btn');
-    const label = btn.querySelector('span');
-    const spin = document.getElementById('ai-big-spin');
+    const container = document.getElementById('ai-cards-container');
+    const dropText = document.getElementById('drop-text');
+    
+    console.log("1. Iniciando subida de:", file.name); // LOG DE CONTROL
+    dropText.innerText = "PROCESANDO...";
 
-    label.innerText = "Procesando...";
-    spin.classList.remove('hidden');
+    const formData = new FormData();
+    formData.append('file', file);
 
-    // Simulación de extracción de datos por IA
-    setTimeout(() => {
-        document.getElementById('f-num').value = "EXP-2026-" + Math.floor(Math.random() * 900 + 100);
-        document.getElementById('f-nombre').value = "Sucesión Inmobiliaria - Análisis IA";
-        document.getElementById('f-resumen').value = "La IA ha determinado que este caso trata sobre una disputa de propiedad basada en el documento cargado...";
+    try {
+        const response = await fetch('http://127.0.0.1:8000/analyze', {
+            method: 'POST',
+            body: formData
+        });
 
-        label.innerText = "¡Completado!";
-        spin.classList.add('hidden');
-        btn.classList.replace('bg-indigo-600', 'bg-emerald-500');
-    }, 1500);
-};
+        console.log("2. Respuesta recibida. Status:", response.status); // LOG DE CONTROL
 
-window.saveNewExpediente = function () {
-    const name = document.getElementById('f-nombre').value;
-    const id = document.getElementById('f-num').value;
+        const result = await response.json();
+        console.log("3. Datos de la API:", result); // LOG DE CONTROL
 
-    if (!name || !id) {
-        alert("Por favor completa los campos obligatorios");
-        return;
+        if (response.ok && result.data) {
+            const data = result.data;
+            const noDataMsg = document.getElementById('no-data-msg');
+
+            // Si el contenedor no existe, esto dará error. Validamos:
+            if (!container) {
+                console.error("ERROR: No encontré el div con id 'ai-cards-container'");
+                alert("Falta el id='ai-cards-container' en tu HTML");
+                return;
+            }
+
+            if (noDataMsg) noDataMsg.remove();
+
+            // Definimos la card
+            const cardHtml = `
+                <div class="flex items-center justify-between p-5 bg-white border border-slate-100 rounded-[1.8rem] hover:shadow-md transition-all mb-4">
+                    <div class="flex items-center gap-5">
+                        <div class="w-11 h-11 rounded-2xl bg-[#FAEFE6] flex items-center justify-center text-[#F594B0]">
+                            <i class="far fa-file-pdf text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block font-medium text-slate-700 text-sm">${data.titulo_caso || file.name}</span>
+                            <span class="text-[11px] text-slate-400 italic font-light">
+                                "${data.resumen || 'Análisis legal completado.'}"
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-8">
+                        <span class="text-[10px] font-bold py-1.5 px-4 rounded-full bg-[#FAEFE6] text-[#F594B0] uppercase">
+                            ${data.materia || 'CIVIL'}
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            // INYECTAMOS
+            container.insertAdjacentHTML('afterbegin', cardHtml);
+            console.log("4. ¡Tarjeta inyectada con éxito!"); // LOG DE CONTROL
+            dropText.innerText = "¡LISTO!";
+            
+        } else {
+            console.warn("La API respondió pero sin el formato esperado.");
+        }
+
+    } catch (error) {
+        console.error("ERROR CRÍTICO:", error);
+        dropText.innerText = "ERROR DE RED";
     }
-
-    // Añadir al array global de expedientes
-    expedientes.unshift({
-        id: id,
-        name: name,
-        materia: 'Civil',
-        materiaFull: 'Civil — Analizado por IA',
-        partes: 'Parte Actora vs Parte Demandada',
-        resumen: document.getElementById('f-resumen').value,
-        vence: addDays(15),
-        estado: 'Activo'
-    });
-
-    alert("Expediente guardado con éxito");
-    loadPage('expedientes');
-};
+}
