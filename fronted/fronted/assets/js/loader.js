@@ -23,6 +23,11 @@ function loadPage(pageName) {
             buttons: ''
         },
 
+        'configuracion': {
+            title: 'Ajustes y Preferencias',
+            buttons: ''
+        },
+
         'archivados': {
             title: 'Expedientes Archivados',
             buttons: `
@@ -38,13 +43,13 @@ function loadPage(pageName) {
             <i class="fas fa-arrow-left mr-2"></i> Volver
         </button>`
         },
-    'visor': {
-        title: 'Visor de Expediente',
-        buttons: `
+        'visor': {
+            title: 'Visor de Expediente',
+            buttons: `
             <button onclick="loadPage('expedientes')" class="bg-white text-stone-900 border border-stone-200 px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-stone-50 transition-all">
                 <i class="fas fa-times mr-2 text-stone-400"></i> Cerrar Visor
             </button>`
-    }
+        }
     };
 
     const config = pageConfig[pageName] || { title: 'LeIA LegalTech', buttons: '' };
@@ -326,7 +331,7 @@ window.renderArchivedCards = function () {
    LÓGICA DE NUEVO EXPEDIENTE
    ════════════════════════════════════════════════════════════ */
 
-window.handleFile = function(file) {
+window.handleFile = function (file) {
     if (!file) return;
     // Simulamos detección de PDF
     const banner = document.getElementById('ai-banner');
@@ -334,7 +339,7 @@ window.handleFile = function(file) {
     console.log("Archivo cargado:", file.name);
 };
 
-window.runAI = function() {
+window.runAI = function () {
     const btn = document.getElementById('ai-big-btn');
     const label = btn.querySelector('span');
     const spin = document.getElementById('ai-big-spin');
@@ -347,14 +352,14 @@ window.runAI = function() {
         document.getElementById('f-num').value = "EXP-2026-" + Math.floor(Math.random() * 900 + 100);
         document.getElementById('f-nombre').value = "Sucesión Inmobiliaria - Análisis IA";
         document.getElementById('f-resumen').value = "La IA ha determinado que este caso trata sobre una disputa de propiedad basada en el documento cargado...";
-        
+
         label.innerText = "¡Completado!";
         spin.classList.add('hidden');
         btn.classList.replace('bg-indigo-600', 'bg-emerald-500');
     }, 1500);
 };
 
-window.saveNewExpediente = function() {
+window.saveNewExpediente = function () {
     const name = document.getElementById('f-nombre').value;
     const id = document.getElementById('f-num').value;
 
