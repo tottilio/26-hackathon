@@ -1,6 +1,5 @@
 # ⚖️ LEIA - (Expedientes Legales e Inteligencia Artificial)
 
-* IMPORTANTE CAMBIARSE A LA RAMA fronted
 * Abrir un live server en la carpeta fronted/presentacion.html
 
 ## ## Inspiration
