@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEIA — Presentación del Proyecto</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body { 
+    font-family: 'DM Sans', sans-serif; 
+    /* Fondo con la imagen especificada */
+    background-image: url('fronted/assets/img/imagen4.png');
+    background-size: cover; /* La imagen cubre todo el fondo */
+    background-position: center; /* Centramos la imagen */
+    background-attachment: fixed; /* La imagen no se mueve al hacer scroll */
+    color: #1A1917; 
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative; /* Necesario para el overlay */
+  }
+
+  /* Overlay translúcido para legibilidad (tu "pestañita blanca") */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Un blanco hueso muy suave (#D2DDDE de tu paleta con opacidad) */
+    background: rgba(210, 221, 222, 0.90);
+    z-index: 1; /* Pone el overlay detrás del contenido */
+  }
+
+  /* Aseguramos que el contenido esté sobre el overlay */
+  header, section { position: relative; z-index: 2; }
+
+  /* --- CABECERA --- */
+  header {
+    padding: 2rem 5%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px; background: #1A1917; border-radius: 8px; 
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-text { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+  .logo-sub { font-size: 13px; color: #6B6860; }
+
+  /* --- HERO SECTION --- */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 5%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-tag {
+    background: #EAEAEA; color: #6B6860;
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: #1A1917;
+    margin-bottom: 24px;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: 1.25rem;
+    color: #6B6860;
+    margin-bottom: 40px;
+    max-width: 700px;
+  }
+
+  /* --- BOTÓN DE DEMO --- */
+  .btn-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #194A65; /* Tu azul institucional #194A65 */
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(25, 74, 101, 0.2);
+    border: none; cursor: pointer; font-family: inherit;
+  }
+  .btn-demo:hover {
+    background: #12374d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 74, 101, 0.3);
+  }
+  .btn-demo svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* --- FEATURES / PUNTOS CLAVE PARA JURADOS --- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 4rem 5%;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .feature-card {
+    background: #FFFFFF;
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.09);
+    transition: transform 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-5px); }
+  .feature-icon {
+    width: 48px; height: 48px;
+    background: #F0EFE9;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: #1A1917; }
+  .feature-desc { font-size: 0.95rem; color: #6B6860; }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2.5rem; }
+    .hero p { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="5" height="6" rx="1" fill="white" opacity="0.9"/>
+        <rect x="9" y="2" width="5" height="3" rx="1" fill="white" opacity="0.55"/>
+        <rect x="9" y="7" width="5" height="7" rx="1" fill="white" opacity="0.9"/>
+        <rect x="2" y="10" width="5" height="4" rx="1" fill="white" opacity="0.55"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">LEIA</div>
+      <div class="logo-sub">Expedientes Inteligentes</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-tag">Proyecto de Innovación Legal</div>
+    <h1>El futuro de la gestión de despachos jurídicos </h1>
+    <p>LEIA centraliza tus expedientes, automatiza el control de plazos procesales y transforma el caos administrativo en un flujo de trabajo claro, eficiente e inteligente.</p>
+    
+    <a href="fronted/Index.html" class="btn-demo" id="demo-button">
+      Entrar a la Demo Interactiva
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">📁</div>
+      <h3 class="feature-title">Gestión Centralizada</h3>
+      <p class="feature-desc">Acceso inmediato a expedientes activos y archivados. Toda la información clave, las partes involucradas y el historial del caso en un solo lugar.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">⏱️</div>
+      <h3 class="feature-title">Control de Vencimientos</h3>
+      <p class="feature-desc">Prevención activa de riesgos legales. Un sistema visual de semáforos que prioriza los plazos procesales para que ninguna fecha límite pase desapercibida.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3 class="feature-title">Diseño Intuitivo (UI/UX)</h3>
+      <p class="feature-desc">Desarrollado como una Single Page Application (SPA) para una navegación sin interrupciones, con una interfaz limpia que reduce la carga cognitiva del abogado.</p>
+    </div>
+  </section>
+
+</body>
+</html>

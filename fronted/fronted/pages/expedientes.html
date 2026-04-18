@@ -1,0 +1,92 @@
+<div class="mb-4">
+  <span id="count-badge" class="font-['DM_Mono'] text-xs px-3 py-1 bg-white border border-slate-200 rounded-full text-slate-500 font-medium shadow-sm">
+    Cargando expedientes...
+  </span>
+</div>
+
+<div class="flex flex-wrap gap-2 mb-6 items-center">
+  <div class="relative flex-1 min-w-[180px]">
+    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">⌕</span>
+    <input type="text" id="search-input" placeholder="Buscar por nombre, materia, partes…" oninput="renderCards()"
+           class="w-full pl-8 pr-3 py-2 text-[13px] font-['DM_Sans'] border border-slate-200 rounded-lg bg-white text-slate-800 outline-none focus:border-slate-400 transition-colors">
+  </div>
+  
+  <select id="filter-materia" onchange="renderCards()" class="custom-select">
+    <option value="">Todas las materias</option>
+    <option value="Civil">Civil</option>
+    <option value="Familiar">Familiar</option>
+    <option value="Laboral">Laboral</option>
+    <option value="Penal">Penal</option>
+    <option value="Mercantil">Mercantil</option>
+  </select>
+  
+  <select id="filter-plazo" onchange="renderCards()" class="custom-select">
+    <option value="">Cualquier plazo</option>
+    <option value="urgente">Urgente (≤7 días)</option>
+    <option value="proximo">Próximo (8–30 días)</option>
+    <option value="holgado">Holgado (>30 días)</option>
+  </select>
+  
+  <select id="filter-estado" onchange="renderCards()" class="custom-select">
+    <option value="">Todos los estados</option>
+    <option value="Activo">Activo</option>
+    <option value="En pausa">En pausa</option>
+  </select>
+  
+  <button id="sort-btn" onclick="toggleSort()" class="font-['DM_Mono'] text-xs font-medium px-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-500 hover:bg-slate-50 transition-colors whitespace-nowrap">
+    Ordenar: Plazo ↑
+  </button>
+</div>
+
+<div class="flex flex-col gap-3" id="cards-container"></div>
+
+<style>
+  /* Clases personalizadas extraídas de tu código original */
+  .custom-select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 30px 8px 12px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    background-color: white;
+    color: #1A1917;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236B6860' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  
+  .exp-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(0,0,0,0.09);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    transition: all 0.15s;
+    animation: fadeIn 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .exp-card:hover { border-color: rgba(0,0,0,0.15); box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .status-pill {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    cursor: pointer; border: none; letter-spacing: 0.2px; font-family: 'DM Sans', sans-serif;
+  }
+  .pill-activo { background: #E4F2E9; color: #2A5C3A; }
+  .pill-pausa  { background: #FDF0D8; color: #7A4F10; }
+
+  .vence-num { font-size: 28px; font-weight: 600; line-height: 1; font-family: 'DM Mono', monospace; letter-spacing: -1px; }
+  .vence-red   { color: #8B2A2A; }
+  .vence-amber { color: #7A4F10; }
+  .vence-green { color: #2A5C3A; }
+
+  @media (max-width: 500px) {
+    .exp-card { flex-direction: column; }
+    .exp-right { flex-direction: row; border-left: none; border-top: 1px solid rgba(0,0,0,0.09); padding-left: 0; padding-top: 12px; }
+  }
+</style>

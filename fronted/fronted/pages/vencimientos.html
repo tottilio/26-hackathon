@@ -1,0 +1,181 @@
+<div class="filters mb-6">
+  <div class="chip active" onclick="filtrar(this,'todos')">Todos</div>
+  <div class="chip" onclick="filtrar(this,'vencido')">Vencidos</div>
+  <div class="chip" onclick="filtrar(this,'proximo')">Próximos 7 días</div>
+  <div class="chip" onclick="filtrar(this,'vigente')">Vigentes</div>
+  <div class="chip" onclick="filtrar(this,'pendiente')">Pendientes</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; padding: 10px;">
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #FEF2F2; color: #DC2626;">
+      <i class="fas fa-calendar-times"></i>
+    </div>
+    <div>
+      <p class="stat-label">Vencidos</p>
+      <p class="stat-number" style="color: #991B1B;">4</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #FFF7ED; color: #EA580C;">
+      <i class="fas fa-clock"></i>
+    </div>
+    <div>
+      <p class="stat-label">Próximos 7 días</p>
+      <p class="stat-number" style="color: #C2410C;">7</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #EFF6FF; color: #2563EB;">
+      <i class="fas fa-calendar-alt"></i>
+    </div>
+    <div>
+      <p class="stat-label">Este mes</p>
+      <p class="stat-number" style="color: #1E40AF;">12</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #F0FDF4; color: #16A34A;">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div>
+      <p class="stat-label">Vigentes</p>
+      <p class="stat-number" style="color: #166534;">31</p>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="table-toolbar">
+  <strong>Todos los casos</strong>
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+    <input type="text" placeholder="Buscar expediente..." oninput="buscar(this.value)">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="t-head">
+    <span>Expediente / Caso</span>
+    <span>Tipo de plazo</span>
+    <span>Fecha límite</span>
+    <span>Estado</span>
+    <span>Responsable</span>
+  </div>
+  <div class="t-row" data-status="vencido">
+    <div><div class="t-case-name">Exp. 2024-081-A</div><div class="t-sub">García vs. IMSS</div></div>
+    <div style="color:#999;font-size:12px">Contestación</div>
+    <div class="t-date-red">17 abr</div>
+    <div><span class="badge vencido">Vencido</span></div>
+    <div style="color:#999;font-size:12px">L. Pérez</div>
+  </div>
+  <div class="t-row" data-status="vencido">
+    <div><div class="t-case-name">Exp. 2024-033-B</div><div class="t-sub">Molina e Hijos S.A.</div></div>
+    <div style="color:#999;font-size:12px">Recurso de apelación</div>
+    <div class="t-date-red">17 abr</div>
+    <div><span class="badge vencido">Vencido</span></div>
+    <div style="color:#999;font-size:12px">L. Torres</div>
+  </div>
+  <div class="t-row" data-status="proximo">
+    <div><div class="t-case-name">Exp. 2023-315-C</div><div class="t-sub">Hernández vs. Estado</div></div>
+    <div style="color:#999;font-size:12px">Audiencia inicial</div>
+    <div class="t-date-amber">19 abr</div>
+    <div><span class="badge proximo">Próximo</span></div>
+    <div style="color:#999;font-size:12px">L. Torres</div>
+  </div>
+  <div class="t-row" data-status="proximo">
+    <div><div class="t-case-name">Exp. 2024-102-B</div><div class="t-sub">Constructora MX</div></div>
+    <div style="color:#999;font-size:12px">Presentar pruebas</div>
+    <div class="t-date-amber">22 abr</div>
+    <div><span class="badge proximo">Próximo</span></div>
+    <div style="color:#999;font-size:12px">L. Ramos</div>
+  </div>
+  <div class="t-row" data-status="proximo">
+    <div><div class="t-case-name">Exp. 2024-208-F</div><div class="t-sub">Notificación sentencia</div></div>
+    <div style="color:#999;font-size:12px">Notificación</div>
+    <div class="t-date-amber">23 abr</div>
+    <div><span class="badge proximo">Próximo</span></div>
+    <div style="color:#999;font-size:12px">L. Díaz</div>
+  </div>
+  <div class="t-row" data-status="vigente">
+    <div><div class="t-case-name">Exp. 2024-055-D</div><div class="t-sub">López & Asociados</div></div>
+    <div style="color:#999;font-size:12px">Resolución</div>
+    <div class="t-date-normal">28 abr</div>
+    <div><span class="badge vigente">Vigente</span></div>
+    <div style="color:#999;font-size:12px">L. Pérez</div>
+  </div>
+  <div class="t-row" data-status="pendiente">
+    <div><div class="t-case-name">Exp. 2024-220-E</div><div class="t-sub">Ramírez vs. SAT</div></div>
+    <div style="color:#999;font-size:12px">Amparo directo</div>
+    <div class="t-date-normal">05 may</div>
+    <div><span class="badge pendiente">Pendiente</span></div>
+    <div style="color:#999;font-size:12px">L. Díaz</div>
+  </div>
+  <div class="t-row" data-status="vigente">
+    <div><div class="t-case-name">Exp. 2024-190-G</div><div class="t-sub">Banco Regional</div></div>
+    <div style="color:#999;font-size:12px">Contestación demanda</div>
+    <div class="t-date-normal">12 may</div>
+    <div><span class="badge vigente">Vigente</span></div>
+    <div style="color:#999;font-size:12px">L. Ramos</div>
+  </div>
+</div>
+
+<style>
+/* Estilos específicos encapsulados (sin afectar el body global de tu SPA) */
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1px solid #D2DDDE; cursor: pointer; background: #fff; color: #7a8a8b; transition: all .15s; }
+.chip:hover { border-color: #194A65; color: #194A65; }
+.chip.active { background: #194A65; border-color: #194A65; color: #fff; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.kpi { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #D2DDDE;  }
+.kpi-label { font-size: 13px; color: #6b7b7c; margin-bottom: 6px; }
+.kpi-val { font-size: 34px; font-weight: 600; line-height: 1; }
+.kpi-val.red   { color: #C82C2A; }   
+.kpi-val.amber { color: #FFBE98; }   
+.kpi-val.blue  { color: #194A65; }   
+.kpi-val.green { color: #2a7a4d; }
+
+.stat-card { background: #FFFFFF; border: 1px solid #D2DDDE; border-radius: 12px; padding: 16px 18px; display: flex; gap: 13px; align-items: flex-start; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: box-shadow 0.2s; }
+.stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.stat-icon { width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+.stat-label { font-size: 12px; color: #7a8a8b; font-weight: 500; margin-bottom: 6px; }
+.stat-number { font-size: 32px; font-weight: 700; line-height: 1; }   
+
+
+.table-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.table-toolbar strong { font-size: 14px; font-weight: 600; color: #194A65; }
+.search-box          { position: relative; }
+.search-box input { font-size: 12px; border: 1px solid #D2DDDE; border-radius: 8px; padding: 6px 10px 6px 30px; outline: none; width: 190px; background: #fff; }
+.search-box input:focus { border-color: #194A65; } 
+.search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; stroke: #aababa; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+.table-wrap { background: #fff; border: 1px solid #D2DDDE; border-radius: 12px; overflow: hidden; }
+.t-head { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr; padding: 10px 16px; background: #f5ede4; border-bottom: 1px solid #D2DDDE; font-size: 11px; font-weight: 600; color: #7a8a8b; text-transform: uppercase; letter-spacing: .05em; gap: 8px; }
+.t-row { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr; padding: 11px 16px; border-bottom: 1px solid #FAEFE6; font-size: 13px; align-items: center; gap: 8px; transition: background .1s; }
+.t-row:last-child { border-bottom: none; }
+.t-row:hover      { background: #f9f4ef; } 
+.t-case-name { font-weight: 500; }
+.t-sub       { font-size: 11px; color: #7a8a8b; margin-top: 1px; }
+.t-date-red    { color: #C82C2A; font-weight: 500; font-size: 12px; }
+.t-date-amber  { color: #FFBE98; font-weight: 500; font-size: 12px; }
+.t-date-normal { color: #7a8a8b; font-size: 12px; }
+
+.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+.badge.vencido  { background: #fce8e8; color: #C82C2A; } 
+.badge.proximo  { background: #fff3ea; color: #c97a40; } 
+.badge.vigente  { background: #e8f5ee; color: #2a7a4d; } 
+.badge.pendiente{ background: #e8eef5; color: #194A65; } 
+
+@media (max-width: 800px) {
+  .kpis    { grid-template-columns: 1fr 1fr; }
+  .two-col { flex-direction: column; }
+  .t-head, .t-row  { grid-template-columns: 2fr 1fr 80px 80px; }
+  .t-head span:nth-child(5), .t-row > *:nth-child(5) { display: none; }
+}
+</style>
