@@ -1,0 +1,41 @@
+<div id="detalle-container" class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <button onclick="loadPage('expedientes')" class="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-full px-4 py-1.5 cursor-pointer text-[11px] text-slate-400 mb-6 hover:bg-slate-50 transition-all font-medium">
+        <i class="fas fa-chevron-left text-[9px]"></i> Volver a expedientes
+    </button>
+
+    <div class="bg-white rounded-[1.8rem] border border-black/5 p-6 mb-3 flex justify-between items-center shadow-sm">
+        <div>
+            <span id="det-id" class="inline-block text-[9px] font-bold tracking-widest text-[#194A65] bg-[#EAF2F7] rounded-full px-3 py-1 mb-2 font-mono">---</span>
+            <p id="det-nombre" class="text-[15px] font-medium text-slate-700">Cargando expediente...</p>
+            <p id="det-materia" class="text-[11px] text-slate-400 mt-1">---</p>
+        </div>
+        <div class="text-center bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100">
+            <p id="det-count" class="text-3xl font-light text-[#194A65] leading-none font-mono">0</p>
+            <p class="text-[9px] font-bold tracking-widest text-slate-400 font-mono mt-1">DOCUMENTOS</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-[1.8rem] border border-black/5 px-6 py-4 mb-4 flex items-center gap-4 shadow-sm">
+        <span class="text-[9px] font-bold tracking-widest text-[#194A65] uppercase whitespace-nowrap font-mono">Resumen IA</span>
+        <span id="det-resumen-ia" class="text-[11px] text-slate-400 italic flex-1 truncate">"Analizando contenido..."</span>
+        <span id="det-vence" class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#FAEFE6] text-[#F594B0] tracking-wider font-mono">---</span>
+    </div>
+
+    <div id="pdf-list" class="flex flex-col gap-2.5">
+        </div>
+</div>
+
+<style>
+  .pdf-card {
+    background:#fff; border:1px solid rgba(0,0,0,0.06); border-radius:1.5rem;
+    padding:16px 22px; display:flex; align-items:center; justify-content:space-between;
+    cursor:pointer; transition:all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .pdf-card:hover { border-color:#F594B0; box-shadow:0 10px 25px -10px rgba(245,148,176,.2); transform:translateY(-2px); }
+  .pdf-icon-box {
+    width:42px; height:42px; border-radius:14px; background:#FAEFE6;
+    display:flex; align-items:center; justify-content:center;
+    color:#F594B0; font-size:16px; flex-shrink:0; transition:all .2s;
+  }
+  .pdf-card:hover .pdf-icon-box { background:#F594B0; color:#fff; }
+</style>

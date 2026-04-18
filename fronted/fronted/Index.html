@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeIA - Legal Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #FBFBFA; /* Blanco hueso muy suave */
+        }
+        /* Personalización de scrollbar para que sea minimalista */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-slate-600">
+
+    <aside class="w-64 bg-[#333D47] text-slate-300 flex flex-col m-4 rounded-[2.5rem] shadow-sm">
+        <div class="p-8 border-b border-white/5">
+    <button onclick="window.location.href='../presentacion.html'" 
+            class="flex items-center gap-3 text-white tracking-[0.3em] font-light text-lg bg-transparent border-none p-0 cursor-pointer hover:opacity-80 transition-opacity focus:outline-none group">
+        <span class="font-bold text-slate-400 group-hover:text-white transition-colors">LEIA</span>VIEW
+    </button>
+</div>
+        <nav class="flex-1 p-6 space-y-2">
+            <button onclick="loadPage('dashboard')" class="w-full flex items-center p-4 hover:bg-white/5 rounded-2xl transition-all group text-sm tracking-wide">
+                <i class="fas fa-columns mr-3 text-slate-500 group-hover:text-white transition-colors"></i> Dashboard
+            </button>
+            <button onclick="loadPage('expedientes')" class="w-full flex items-center p-4 hover:bg-white/5 rounded-2xl transition-all group text-sm tracking-wide">
+                <i class="fas fa-folder mr-3 text-slate-500 group-hover:text-white transition-colors"></i> Expedientes
+            </button>
+            <button onclick="loadPage('vencimientos')" class="w-full flex items-center p-4 hover:bg-white/5 rounded-2xl transition-all group text-sm tracking-wide">
+                <i class="fas fa-calendar-check mr-3 text-slate-500 group-hover:text-orange-200 transition-colors"></i> Vencimientos
+            </button>
+            <button onclick="loadPage('configuracion')" class="w-full flex items-center p-4 hover:bg-white/5 rounded-2xl transition-all group text-sm tracking-wide">
+    <i class="fas fa-cog mr-3 text-slate-500 group-hover:text-white transition-colors"></i> Configuración
+</button>
+        </nav>
+        <div class="p-6">
+            <div class="bg-white/5 p-4 rounded-2xl flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span class="text-[10px] uppercase tracking-widest font-medium">Abogado Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="p-10 flex justify-between items-end">
+            <div>
+                <h1 id="page-title" class="text-3xl font-medium text-[#1A1F24] tracking-tight">Gestión de Casos</h1>
+                <p class="text-slate-400 text-sm mt-1 font-light">Análisis de actividad y documentos.</p>
+            </div>
+            <div id="header-actions" class="flex gap-4"></div>
+        </header>
+
+        <div id="main-content" class="px-10 pb-10 overflow-y-auto space-y-10"></div>
+    </main>
+
+    <script src="assets/js/loader.js"></script>
+</body>
+</html>

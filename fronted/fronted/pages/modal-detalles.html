@@ -1,0 +1,52 @@
+<div id="modal-overlay"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-[#194A65]/20 backdrop-blur-sm transition-opacity"
+     onclick="if(event.target===this) this.remove()">
+
+    <div class="bg-white rounded-[2rem] shadow-xl w-full max-w-md mx-4 p-8 relative animate-fade-in-up">
+
+        <button onclick="document.getElementById('modal-overlay').remove()"
+                class="absolute top-5 right-5 text-slate-300 hover:text-slate-500 transition-colors text-lg leading-none">
+            ✕
+        </button>
+
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-[#FAEFE6] flex items-center justify-center text-[#F594B0]">
+                <i class="far fa-file-pdf text-xl"></i>
+            </div>
+            <div>
+                <p class="font-medium text-slate-700 text-sm">demanda_civil_01.pdf</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Análisis de inteligencia · 20 Mayo 2025</p>
+            </div>
+        </div>
+
+        <hr class="border-slate-100 mb-6">
+
+        <div class="space-y-3 text-sm">
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-[11px] uppercase tracking-wider">Tipo</span>
+                <span class="text-slate-700 font-medium">Demanda civil</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-[11px] uppercase tracking-wider">Estado</span>
+                <span class="text-[10px] font-bold py-1 px-3 rounded-full bg-[#FAEFE6] text-[#F594B0] uppercase tracking-wider">Pendiente</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-[11px] uppercase tracking-wider">Similitud más alta</span>
+                <span class="text-slate-700 font-medium">Exp. 405-2024 · 92%</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-[11px] uppercase tracking-wider">Cláusula crítica</span>
+                <span class="text-slate-700 font-medium">Cláusula 4</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400 text-[11px] uppercase tracking-wider">Plazo</span>
+                <span class="text-slate-700 font-medium">20 Mayo 2025</span>
+            </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-[#FCFCFB] rounded-2xl border-l-2 border-[#F594B0] text-[11px] text-slate-500 italic leading-relaxed">
+            "Incumplimiento contractual identificado en cláusula 4. Se recomienda revisar antecedentes del expediente 405-2024 por alta similitud en los argumentos de defensa."
+        </div>
+
+    </div>
+</div>

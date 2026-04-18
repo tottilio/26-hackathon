@@ -1,12 +1,16 @@
 import json
 import re
 import google.generativeai as genai
+import os
+from dotenv import load_dotenv
 
-# Tu API Key actual
-genai.configure(api_key="AIzaSyC4GbGyRHcl_vexUs1V0NZNzhe3uP1hzY8")
+# Configuración de la API Key
+# Sustituye 'TU_LLAVE_AQUÍ' por la llave que me pasaste antes
+load_dotenv()
+genai.configure(api_key=os.getenv("API_KEY"))
 
 def extract_legal_data(text):
-    # Definimos el modelo de forma simple
+    # Usamos la versión Flash: es la más rápida y gratuita
     model = genai.GenerativeModel('gemini-2.5-flash')
     
     # El prompt es la clave: le pedimos explícitamente el JSON
