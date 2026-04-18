@@ -1,0 +1,6 @@
+{
+  "name": "IurisBubble AI",
+  "description": "A floating legal assistant widget for document analysis and semantic search in PDFs using MongoDB Atlas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
