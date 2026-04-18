@@ -2,54 +2,51 @@ import json
 import re
 import google.generativeai as genai
 
-# Configuración de la API Key
-# Sustituye 'TU_LLAVE_AQUÍ' por la llave que me pasaste antes
-genai.configure(api_key="TU_LLAVE_AQUÍ")
+# Tu API Key actual
+genai.configure(api_key="AIzaSyC4GbGyRHcl_vexUs1V0NZNzhe3uP1hzY8")
 
 def extract_legal_data(text):
-    # Usamos la versión Flash: es la más rápida y gratuita
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Definimos el modelo de forma simple
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
+    # El prompt es la clave: le pedimos explícitamente el JSON
     prompt = f"""
-    Eres un experto analista legal. Extrae la información del texto y devuélvela estrictamente en formato JSON.
-    
-    Estructura JSON:
+    Analiza el siguiente texto legal y extrae la información ÚNICAMENTE en este formato JSON:
     {{
-        "expediente": "Número de expediente",
-        "titulo_caso": "Parte Actora vs Parte Demandada",
-        "materia": "Materia legal (ej. Civil, Amparo, Familiar)",
-        "partes": {{ "actor": "Nombre", "demandado": "Nombre" }},
-        "resumen": "Resumen ejecutivo del documento",
+        "expediente": "número",
+        "titulo_caso": "actor vs demandado",
+        "materia": "civil/amparo/etc",
+        "partes": {{ "actor": "nombre", "demandado": "nombre" }},
+        "resumen": "máximo 3 oraciones",
         "fecha_vencimiento": "YYYY-MM-DD",
         "estado": "Activo"
     }}
 
-    Si falta un dato, pon "No especificado". No escribas nada más que el JSON.
-
-    TEXTO A ANALIZAR:
-    {text[:30000]}
+    IMPORTANTE: No escribas nada más, solo el objeto JSON.
+    Texto: {text[:15000]}
     """
 
     try:
-        # Llamada a la API de Google
+        # Llamada directa sin configuraciones extra que den error
         response = model.generate_content(prompt)
-        raw_content = response.text
+        res_text = response.text
+
+        # Limpiamos el texto por si la IA agrega basura (```json ... ```)
+        json_match = re.search(r'\{.*\}', res_text, re.DOTALL)
+        if json_match:
+            return json.loads(json_match.group(0))
         
-        # Limpieza por si la IA pone ```json ... ```
-        match = re.search(r'\{.*\}', raw_content, re.DOTALL)
-        if match:
-            return json.loads(match.group(0))
-        return json.loads(raw_content)
+        return json.loads(res_text)
 
     except Exception as e:
-        print(f"Error con Gemini: {e}")
-        # Retorno de seguridad para no romper tu flujo
+        print(f"Error en Gemini: {e}")
+        # Retorno de emergencia para que tu sistema no truene
         return {
-            "expediente": "ERROR_API",
+            "expediente": "N/A",
             "titulo_caso": "Error de procesamiento",
             "materia": "N/A",
             "partes": {"actor": "N/A", "demandado": "N/A"},
-            "resumen": "Hubo un problema con la conexión a la nube.",
-            "fecha_vencimiento": "2026-01-01",
+            "resumen": "Hubo un problema al conectar con la IA.",
+            "fecha_vencimiento": "N/A",
             "estado": "Inactivo"
         }
