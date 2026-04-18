@@ -4,11 +4,11 @@ import google.generativeai as genai
 
 # Configuración de la API Key
 # Sustituye 'TU_LLAVE_AQUÍ' por la llave que me pasaste antes
-genai.configure(api_key="TU_LLAVE_AQUÍ")
+genai.configure(api_key="AIzaSyC4GbGyRHcl_vexUs1V0NZNzhe3uP1hzY8")
 
 def extract_legal_data(text):
     # Usamos la versión Flash: es la más rápida y gratuita
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     
     prompt = f"""
     Eres un experto analista legal. Extrae la información del texto y devuélvela estrictamente en formato JSON.
