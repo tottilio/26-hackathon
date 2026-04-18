@@ -1,71 +1,146 @@
-<section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-            <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Activos</p>
-            <div class="flex flex-col items-center">
-                <p id="count-activos" class="text-5xl font-light text-[#194A65]">124</p>
-            </div>
-        </div>
-        <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-            <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Pendientes</p>
-            <div class="flex flex-col items-center">
-                <p class="text-5xl font-light text-slate-700">12</p>
-            </div>
-        </div>
-        <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-            <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Plazos</p>
-            <div class="flex flex-col items-center">
-                <p class="text-5xl font-light text-[#F594B0]">05</p>
-            </div>
-        </div>
-        <div class="bg-[#194A65] p-8 rounded-[2rem] shadow-xl">
-            <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-white/50 mb-6 text-center">Éxito</p>
-            <div class="flex flex-col items-center">
-                <p class="text-5xl font-light text-white">89%</p>
-            </div>
-        </div>
-    </section>
+<script>
+    // Conectar el evento cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('pdf-input');
+        if (input) {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                console.log('Archivo seleccionado:', file); // Verifica en consola
+                if (file) handleAutoUpload(file);
+            });
+        }
+    });
 
-    <section class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
-        <div class="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-[#FCFCFB]">
-            <h3 class="text-xs font-bold uppercase tracking-widest text-[#194A65]">Resumen de Inteligencia</h3>
-            <span class="text-[9px] font-bold text-slate-300 tracking-widest">PDF ANALYZED</span>
-        </div>
-        
-        <div class="p-6" id="ai-cards-container">
-            <div id="no-data-msg" class="text-center py-10 text-slate-400 text-xs italic">
-                Sube un archivo para generar el análisis de IA...
-            </div>
-        </div>
-    </section>
+    async function loadDashboardData() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/expedientes');
+            const result = await response.json();
+            console.log("Datos del GET:", result);
 
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-[#F8F8F7] p-8 rounded-[2.5rem] border border-slate-50">
-            <h4 class="text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-3 text-[#194A65]">
-                <i class="fas fa-brain opacity-30"></i> Similitud de Casos
-            </h4>
-            <div class="bg-white p-6 rounded-[2rem] shadow-sm flex justify-between items-center border border-white">
-                <p class="font-bold text-sm text-slate-700">Expediente 405-2024</p>
-                <span class="text-2xl font-light text-[#D2DDDE]">92%</span>
-            </div>
-        </div>
+            if (response.ok) {
+                const datosParaPintar = Array.isArray(result) ? result : result.data;
+                renderCards(datosParaPintar);
+            }
+        } catch (error) {
+            console.error("Error al obtener datos:", error);
+        }
+    }
 
-        <div class="bg-white p-2 rounded-[2.5rem] border border-slate-100 shadow-sm h-full">
-            <div class="relative border-2 border-dashed border-[#FAEFE6] rounded-[2.3rem] p-10 flex flex-col items-center justify-center hover:bg-[#FAEFE6]/10 transition-all cursor-pointer group h-full">
-                
-                <input 
-                    type="file" 
-                    id="pdf-input" 
-                    accept=".pdf" 
-                    class="absolute inset-0 opacity-0 cursor-pointer z-10" 
-                    onchange="handleAutoUpload(this.files[0])">
+    async function handleAutoUpload(file) {
+        if (!file) return;
 
-                <div id="drop-icon" class="w-14 h-14 rounded-full bg-[#FCFCFB] flex items-center justify-center mb-4 transition-transform shadow-sm">
-                    <i class="fas fa-plus text-[#D2DDDE]"></i>
+        const dropText = document.getElementById('drop-text');
+        dropText.innerText = "PROCESANDO...";
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/analyze', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log("Respuesta del POST:", result);
+
+            if (response.ok) {
+                await loadDashboardData();
+                dropText.innerText = "¡LISTO!";
+            } else {
+                dropText.innerText = "ERROR DEL SERVIDOR";
+            }
+        } catch (error) {
+            console.error("Error en el POST:", error);
+            dropText.innerText = "ERROR DE RED";
+        }
+    }
+
+    function renderCards(datos) {
+        const container = document.getElementById('ai-cards-container');
+        if (!datos || datos.length === 0) {
+            container.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">Sin expedientes.</p>';
+            return;
+        }
+
+        container.innerHTML = datos.map(item => `
+            <div class="bg-[#F8F8F7] p-5 rounded-2xl mb-3 flex justify-between items-center border border-slate-100">
+                <div>
+                    <p class="text-sm font-bold text-slate-700">${item.expediente || item.title || 'Sin nombre'}</p>
+                    <p class="text-xs text-slate-400 mt-1">${item.descripcion || item.description || ''}</p>
                 </div>
-                
-                <p id="drop-text" class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400">
-                    Añadir Documento
-                </p>
+                <span class="text-xs font-bold text-[#194A65] bg-white px-3 py-1 rounded-full border border-slate-100">
+                    ${item.estado || item.status || '—'}
+                </span>
             </div>
+        `).join('');
+    }
+
+    // Cargar datos al iniciar
+    loadDashboardData();
+</script>
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+        <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Activos</p>
+        <div class="flex flex-col items-center">
+            <p id="count-activos" class="text-5xl font-light text-[#194A65]">124</p>
         </div>
-    </section>
+    </div>
+    <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+        <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Pendientes</p>
+        <div class="flex flex-col items-center">
+            <p class="text-5xl font-light text-slate-700">12</p>
+        </div>
+    </div>
+    <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+        <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-6 text-center">Plazos</p>
+        <div class="flex flex-col items-center">
+            <p class="text-5xl font-light text-[#F594B0]">05</p>
+        </div>
+    </div>
+    <div class="bg-[#194A65] p-8 rounded-[2rem] shadow-xl">
+        <p class="text-[10px] uppercase font-bold tracking-[0.2em] text-white/50 mb-6 text-center">Éxito</p>
+        <div class="flex flex-col items-center">
+            <p class="text-5xl font-light text-white">89%</p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
+    <div class="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-[#FCFCFB]">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-[#194A65]">Resumen de Inteligencia</h3>
+        <span class="text-[9px] font-bold text-slate-300 tracking-widest">PDF ANALYZED</span>
+    </div>
+
+    <div class="p-6" id="ai-cards-container">
+
+    </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-[#F8F8F7] p-8 rounded-[2.5rem] border border-slate-50">
+        <h4 class="text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-3 text-[#194A65]">
+            <i class="fas fa-brain opacity-30"></i> Similitud de Casos
+        </h4>
+        <div class="bg-white p-6 rounded-[2rem] shadow-sm flex justify-between items-center border border-white">
+            <p class="font-bold text-sm text-slate-700">Expediente 405-2024</p>
+            <span class="text-2xl font-light text-[#D2DDDE]">92%</span>
+        </div>
+    </div>
+
+    <div class="bg-white p-2 rounded-[2.5rem] border border-slate-100 shadow-sm h-full">
+        <div
+            class="relative border-2 border-dashed border-[#FAEFE6] rounded-[2.3rem] p-10 flex flex-col items-center justify-center hover:bg-[#FAEFE6]/10 transition-all cursor-pointer group h-full">
+
+            <input type="file" id="pdf-input" accept=".pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+            <div id="drop-icon"
+                class="w-14 h-14 rounded-full bg-[#FCFCFB] flex items-center justify-center mb-4 transition-transform shadow-sm">
+                <i class="fas fa-plus text-[#D2DDDE]"></i>
+            </div>
+
+            <p id="drop-text" class="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400">
+                Añadir Documento
+            </p>
+        </div>
+    </div>
+</section>

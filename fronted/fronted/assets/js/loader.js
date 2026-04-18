@@ -65,10 +65,22 @@ function loadPage(pageName) {
         .then(html => {
             content.innerHTML = html;
 
-            if (pageName === 'expedientes') {
+            if (pageName === 'dashboard') {
+                // ✅ Conectar el input DESPUÉS de que el HTML ya existe en el DOM
+                const pdfInput = document.getElementById('pdf-input');
+                if (pdfInput) {
+                    pdfInput.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) handleAutoUpload(file);
+                    });
+                }
+                loadDashboardData(); // Cargar datos al entrar al dashboard
+            }
+            else if (pageName === 'expedientes') {
                 renderCards();
-            } else if (pageName === 'archivados') {
-                renderArchivedCards(); // Nueva función
+            }
+            else if (pageName === 'archivados') {
+                renderArchivedCards();
             }
         })
         .catch(err => {
@@ -330,13 +342,35 @@ window.renderArchivedCards = function () {
 /* ════════════════════════════════════════════════════════════
    LÓGICA DE NUEVO EXPEDIENTE
    ════════════════════════════════════════════════════════════ */
-async function handleAutoUpload(file) {
+/* ════════════════════════════════════════════════════════════
+   LÓGICA DE EXPEDIENTES (GET & POST)
+   ════════════════════════════════════════════════════════════ */
+
+async function loadDashboardData() {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/expedientes');
+        const result = await response.json();
+
+        // LOG DE CONTROL: Mira en la consola si result tiene .data o es la lista sola
+        console.log("Datos del GET:", result);
+
+        if (response.ok) {
+            // Ajuste dinámico: Si result es lista úsala, si tiene .data usa esa
+            const datosParaPintar = Array.isArray(result) ? result : result.data;
+            renderCards(datosParaPintar);
+        }
+    } catch (error) {
+        console.error("Error al obtener datos:", error);
+    }
+}
+
+async function handleAutoUpload(event, file) {
+    // 🔥 ESTO EVITA QUE LA PANTALLA SE RECARGUE
+    if (event && event.preventDefault) event.preventDefault();
+
     if (!file) return;
 
-    const container = document.getElementById('ai-cards-container');
     const dropText = document.getElementById('drop-text');
-    
-    console.log("1. Iniciando subida de:", file.name); // LOG DE CONTROL
     dropText.innerText = "PROCESANDO...";
 
     const formData = new FormData();
@@ -348,57 +382,16 @@ async function handleAutoUpload(file) {
             body: formData
         });
 
-        console.log("2. Respuesta recibida. Status:", response.status); // LOG DE CONTROL
-
         const result = await response.json();
-        console.log("3. Datos de la API:", result); // LOG DE CONTROL
+        console.log("Respuesta del POST:", result);
 
-        if (response.ok && result.data) {
-            const data = result.data;
-            const noDataMsg = document.getElementById('no-data-msg');
-
-            // Si el contenedor no existe, esto dará error. Validamos:
-            if (!container) {
-                console.error("ERROR: No encontré el div con id 'ai-cards-container'");
-                alert("Falta el id='ai-cards-container' en tu HTML");
-                return;
-            }
-
-            if (noDataMsg) noDataMsg.remove();
-
-            // Definimos la card
-            const cardHtml = `
-                <div class="flex items-center justify-between p-5 bg-white border border-slate-100 rounded-[1.8rem] hover:shadow-md transition-all mb-4">
-                    <div class="flex items-center gap-5">
-                        <div class="w-11 h-11 rounded-2xl bg-[#FAEFE6] flex items-center justify-center text-[#F594B0]">
-                            <i class="far fa-file-pdf text-xl"></i>
-                        </div>
-                        <div>
-                            <span class="block font-medium text-slate-700 text-sm">${data.titulo_caso || file.name}</span>
-                            <span class="text-[11px] text-slate-400 italic font-light">
-                                "${data.resumen || 'Análisis legal completado.'}"
-                            </span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-8">
-                        <span class="text-[10px] font-bold py-1.5 px-4 rounded-full bg-[#FAEFE6] text-[#F594B0] uppercase">
-                            ${data.materia || 'CIVIL'}
-                        </span>
-                    </div>
-                </div>
-            `;
-
-            // INYECTAMOS
-            container.insertAdjacentHTML('afterbegin', cardHtml);
-            console.log("4. ¡Tarjeta inyectada con éxito!"); // LOG DE CONTROL
+        if (response.ok) {
+            // En lugar de recargar, jalamos los datos actualizados
+            await loadDashboardData();
             dropText.innerText = "¡LISTO!";
-            
-        } else {
-            console.warn("La API respondió pero sin el formato esperado.");
         }
-
     } catch (error) {
-        console.error("ERROR CRÍTICO:", error);
+        console.error("Error en el POST:", error);
         dropText.innerText = "ERROR DE RED";
     }
 }
