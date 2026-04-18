@@ -8,7 +8,7 @@ La gestión de expedientes legales suele ser un proceso lento, manual y lleno de
 ## What it does
 Es una plataforma integral que permite la digitalización y análisis de documentos jurídicos:
 * **Carga Inteligente:** Interfaz de arrastrar y soltar (drag & drop) para expedientes PDF.
-* **Análisis con IA:** Extracción automática de metadatos clave como el **título del caso**, la **materia** (Civil, Mercantil, Penal) y un **resumen ejecutivo** procesado por **Gemini 1.5**.
+* **Análisis con IA:** Extracción automática de metadatos clave como el **título del caso**, la **materia** (Civil, Mercantil, Penal) y un **resumen ejecutivo** procesado por **Gemini 2.5**.
 * **Dashboard Dinámico:** Visualización en tiempo real de los casos procesados, permitiendo una gestión fluida de la información.
 * **Persistencia en la Nube:** Almacenamiento seguro en **MongoDB Atlas**, garantizando que la información esté disponible en cualquier momento.
 
@@ -45,6 +45,6 @@ Este proyecto fue un entrenamiento intensivo en:
 ### 🛠️ Tech Stack
 * **Lenguajes:** Python, JavaScript
 * **Frameworks:** FastAPI, Tailwind CSS
-* **IA:** Google Gemini 1.5
+* **IA:** Google Gemini 2.5
 * **DB:** MongoDB Atlas
 * **Herramientas:** Git, Dotenv, Uvicorn
