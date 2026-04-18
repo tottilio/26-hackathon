@@ -1,6 +1,7 @@
 # ⚖️ LEIA - (Expedientes Legales e Inteligencia Artificial)
 
 * IMPORTANTE CAMBIARSE A LA RAMA fronted
+* Abrir un live server en la carpeta fronted/presentacion.html
 
 ## ## Inspiration
 La gestión de expedientes legales suele ser un proceso lento, manual y lleno de burocracia. Nos inspiramos en la necesidad de abogados y estudiantes de derecho de procesar grandes volúmenes de documentos PDF de forma instantánea. Queríamos crear una herramienta que no solo almacenara archivos, sino que "entendiera" el contenido legal para ofrecer resúmenes ejecutivos y clasificaciones automáticas mediante Inteligencia Artificial.
