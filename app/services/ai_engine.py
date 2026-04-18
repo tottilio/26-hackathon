@@ -1,10 +1,13 @@
 import json
 import re
 import google.generativeai as genai
+import os
+from dotenv import load_dotenv
 
 # Configuración de la API Key
 # Sustituye 'TU_LLAVE_AQUÍ' por la llave que me pasaste antes
-genai.configure(api_key="AIzaSyC4GbGyRHcl_vexUs1V0NZNzhe3uP1hzY8")
+load_dotenv()
+genai.configure(api_key=os.getenv("API_KEY"))
 
 def extract_legal_data(text):
     # Usamos la versión Flash: es la más rápida y gratuita
