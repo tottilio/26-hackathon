@@ -64,15 +64,15 @@
         }
 
         container.innerHTML = datos.map(item => `
-            <div class="bg-[#F8F8F7] p-5 rounded-2xl mb-3 flex justify-between items-center border border-slate-100">
-                <div>
-                    <p class="text-sm font-bold text-slate-700">${item.expediente || item.title || 'Sin nombre'}</p>
-                    <p class="text-xs text-slate-400 mt-1">${item.descripcion || item.description || ''}</p>
-                </div>
-                <span class="text-xs font-bold text-[#194A65] bg-white px-3 py-1 rounded-full border border-slate-100">
-                    ${item.estado || item.status || '—'}
-                </span>
-            </div>
+             <div class="bg-[#F8F8F7] p-5 rounded-2xl mb-3 flex justify-between items-center border border-slate-100">
+        <div>
+            <p class="text-sm font-bold text-slate-700">${item.expediente || '—'} · ${item.titulo_caso || 'Sin nombre'}</p>
+            <p class="text-xs text-slate-400 mt-1">${item.materia || ''} · ${item.resumen || ''}</p>
+        </div>
+        <span class="text-xs font-bold text-[#194A65] bg-white px-3 py-1 rounded-full border border-slate-100">
+            ${item.estado || '—'}
+        </span>
+    </div>
         `).join('');
     }
 
@@ -109,11 +109,34 @@
 <section class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10">
     <div class="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-[#FCFCFB]">
         <h3 class="text-xs font-bold uppercase tracking-widest text-[#194A65]">Resumen de Inteligencia</h3>
-        <span class="text-[9px] font-bold text-slate-300 tracking-widest">PDF ANALYZED</span>
+        <span class="text-[9px] font-bold text-slate-300 tracking-widest">PDF / DOCX ANALYZED</span>
     </div>
+    <div class="p-6">
+        <div
+            class="flex items-center justify-between p-5 bg-white border border-slate-100 rounded-[1.8rem] hover:shadow-md hover:border-slate-200 transition-all cursor-pointer group">
+            <div class="flex items-center gap-5">
+                <div
+                    class="w-11 h-11 rounded-2xl bg-[#FAEFE6] flex items-center justify-center text-[#F594B0] group-hover:bg-[#F594B0] group-hover:text-white transition-all">
+                    <i class="far fa-file-pdf text-xl"></i>
+                </div>
+                <div>
+                    <span class="block font-medium text-slate-700 text-sm">demanda_civil_01.pdf</span>
+                    <span class="text-[11px] text-slate-400 italic font-light">"Incumplimiento contractual identificado
+                        en cláusula 4..."</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-8">
+                <span
+                    class="text-[10px] font-bold py-1.5 px-4 rounded-full bg-[#FAEFE6] text-[#F594B0] uppercase tracking-wider">20
+                    Mayo</span>
 
-    <div class="p-6" id="ai-cards-container">
-
+                <button onclick="openModal('modal-detalles')"
+                    class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-[#194A65] transition-colors">
+                    Detalles
+                </button>
+                
+            </div>
+        </div>
     </div>
 </section>
 
