@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
+from contextlib import asynccontextmanager # Nuevo: Para el ciclo de vida de la app
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import db
 from app.services.pdf_processor import read_pdf
@@ -6,21 +7,24 @@ from app.services.ai_engine import extract_legal_data
 import shutil
 import os
 
-# Inicializamos FastAPI
-app = FastAPI(title="API Back-End Legal")
+# Definimos qué hacer cuando la app arranca y cuando se apaga
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Esto ocurre al arrancar (reemplaza al antiguo startup)
+    db.connect()
+    yield
+    # Aquí podrías poner código para cerrar conexiones si fuera necesario
 
-# Configuramos CORS para que el equipo de Front pueda conectarse desde otro puerto/IP
+# Inicializamos la app con el nuevo lifespan
+app = FastAPI(title="API Back-End Legal", lifespan=lifespan)
+
+# --- El resto de tu código (CORS y Rutas) se queda igual --- 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite peticiones de cualquier origen
-    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
-    allow_headers=["*"],  # Permite todos los headers
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
-# Se ejecuta justo cuando arranca la API
-@app.on_event("startup")
-def startup_db_client():
-    db.connect()
 
 @app.post("/analyze")
 async def analyze_pdf(file: UploadFile = File(...)):

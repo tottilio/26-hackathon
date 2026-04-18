@@ -2,7 +2,6 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Carga las variables del archivo .env
 load_dotenv()
 
 class Database:
@@ -11,11 +10,13 @@ class Database:
 
     @classmethod
     def connect(cls):
-        # Se conecta al servidor de MongoDB usando la URL del .env
-        cls.client = MongoClient(os.getenv("MONGO_URI"))
-        # Selecciona la base de datos (Mongo la creará sola al insertar datos)
+        # Usamos tlsAllowInvalidCertificates solo si tienes problemas de SSL en Windows
+        uri = os.getenv("MONGO_URI")
+        cls.client = MongoClient(uri) 
         cls.db = cls.client[os.getenv("DB_NAME")]
-        print(f"✅ Conexión exitosa a la base de datos: {os.getenv('DB_NAME')}")
+        
+        # Prueba de conexión rápida
+        cls.client.admin.command('ping')
+        print(f"✅ ¡Conexión exitosa a MongoDB Atlas! Base de datos: {os.getenv('DB_NAME')}")
 
-# Instancia para usar en toda la app
 db = Database
