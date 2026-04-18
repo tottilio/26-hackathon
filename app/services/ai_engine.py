@@ -1,53 +1,55 @@
-import ollama
-import re  # <--- ESTA ES LA QUE FALTA
 import json
+import re
+import google.generativeai as genai
 
-def extract_legal_data(text: str):
-    """Envía el texto a Ollama para estructurarlo en JSON."""
-    # Definimos las instrucciones precisas para la IA
+# Configuración de la API Key
+# Sustituye 'TU_LLAVE_AQUÍ' por la llave que me pasaste antes
+genai.configure(api_key="TU_LLAVE_AQUÍ")
+
+def extract_legal_data(text):
+    # Usamos la versión Flash: es la más rápida y gratuita
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    
     prompt = f"""
-    [INST] Eres un extractor de datos. Responde UNICAMENTE con un objeto JSON.
-    No hables, no expliques. Si no sabes un dato, pon "No especificado".
-
-    TEXTO:
-    {text[:15000]}
-
-    JSON esperado:
+    Eres un experto analista legal. Extrae la información del texto y devuélvela estrictamente en formato JSON.
+    
+    Estructura JSON:
     {{
-        "expediente": "",
-        "titulo_caso": "",
-        "materia": "",
-        "partes": {{ "actor": "", "demandado": "" }},
-        "resumen": "",
+        "expediente": "Número de expediente",
+        "titulo_caso": "Parte Actora vs Parte Demandada",
+        "materia": "Materia legal (ej. Civil, Amparo, Familiar)",
+        "partes": {{ "actor": "Nombre", "demandado": "Nombre" }},
+        "resumen": "Resumen ejecutivo del documento",
         "fecha_vencimiento": "YYYY-MM-DD",
         "estado": "Activo"
     }}
-    [/INST]
+
+    Si falta un dato, pon "No especificado". No escribas nada más que el JSON.
+
+    TEXTO A ANALIZAR:
+    {text[:30000]}
     """
-    
-    response = ollama.chat(model='llama3', messages=[{'role': 'user', 'content': prompt}])
-    raw_content = response['message']['content']
-    print("--- RESPUESTA CRUDA DE LA IA ---")
-    print(raw_content)
-    print("-------------------------------")
+
     try:
-        # Buscamos lo que esté entre llaves { } para ignorar texto extra
+        # Llamada a la API de Google
+        response = model.generate_content(prompt)
+        raw_content = response.text
+        
+        # Limpieza por si la IA pone ```json ... ```
         match = re.search(r'\{.*\}', raw_content, re.DOTALL)
         if match:
-            clean_json = match.group(0)
-            return json.loads(clean_json)
-        else:
-            raise ValueError("No se encontró JSON en la respuesta")
-            
+            return json.loads(match.group(0))
+        return json.loads(raw_content)
+
     except Exception as e:
-        print(f"Error limpiando respuesta: {e}")
-        # Devolvemos un objeto por defecto para que no truene el Front-End
+        print(f"Error con Gemini: {e}")
+        # Retorno de seguridad para no romper tu flujo
         return {
-            "expediente": "Error de lectura",
-            "titulo_caso": "No disponible",
-            "materia": "No disponible",
+            "expediente": "ERROR_API",
+            "titulo_caso": "Error de procesamiento",
+            "materia": "N/A",
             "partes": {"actor": "N/A", "demandado": "N/A"},
-            "resumen": "La IA no devolvió un formato válido.",
+            "resumen": "Hubo un problema con la conexión a la nube.",
             "fecha_vencimiento": "2026-01-01",
             "estado": "Inactivo"
         }
